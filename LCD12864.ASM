@@ -12,6 +12,7 @@ RDDATA  EQU LCD+3   ;读数据
 
 
 COUNT   EQU 34H
+SPEED 	EOU 35H
 
         ORG 0000H
         AJMP MAIN
@@ -35,7 +36,7 @@ initial_LGS0:
 
 dis_LGS1:   
 		MOV DPTR,#TAB1  ;显示汉字和字符，tab地址传送给DPTR
-        MOV COUNT,#01H		;64传送给count,显示16个字符数据
+        MOV COUNT,#14H		;64传送给count,显示16个字符数据
         MOV A,#80H			;128传送给累加器
         LCALL SEND_I		;调用写指令
 LGS11:  CLR A				;累加器清零			
@@ -43,12 +44,11 @@ LGS11:  CLR A				;累加器清零
         LCALL SEND_D		;写数据
         INC DPTR			;指向tab的指针加一
         DJNZ COUNT,LGS11	;COUNT减一，不等于0时转移到lgs11
-		;
-		;
-		;
-		;
+		;MOV A, SPEED
+		;ADD A,#30H
+		;LCALL SEND_D
         LCALL DELAY3		;延时子程序3
-        LJMP LGS1			;无条件转移
+        RET			
 
 
 SEND_D: PUSH DPL        ;写数据子程序
@@ -92,8 +92,8 @@ DEL22:  DJNZ R7,DEL22
         DJNZ R6,DEL21
         RET
 
-TAB1:   DB "                "
-        DB "     speed：    "
+TAB1:   DB "     speed :    "
+        DB "                "
         DB "                "
         DB "                "
 
